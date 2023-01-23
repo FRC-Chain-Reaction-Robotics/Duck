@@ -10,19 +10,34 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+//import edu.wpi.first.wpilibj.*;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+//import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.IntakeShooter;
+//import frc.robot.subsystems.Swerve;
 
 /**
  * This is a demo program showing the use of the DifferentialDrive class, specifically it contains
  * the code necessary to operate a robot with tank drive.
  */
 public class Robot extends TimedRobot {
-  private DifferentialDrive m_myRobot;
+  private DifferentialDrive dt;
   private Joystick m_leftStick;
   private Joystick m_rightStick;
 
   private final MotorController m_leftMotor = new MotorControllerGroup(new WPI_TalonSRX(0), new WPI_TalonSRX(1));
   
-  private final MotorController m_rightMotor = new PWMSparkMax(1);
+  private final MotorController m_rightMotor = new MotorControllerGroup(new WPI_TalonSRX(2), new WPI_TalonSRX(3));
+
 
   @Override
   public void robotInit() {
@@ -31,13 +46,18 @@ public class Robot extends TimedRobot {
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightMotor.setInverted(true);
 
-    m_myRobot = new DifferentialDrive(m_leftMotor, m_rightMotor);
-    m_leftStick = new Joystick(0);
-    m_rightStick = new Joystick(1);
+    dt = new DifferentialDrive(m_leftMotor, m_rightMotor);
+    XboxController driverController = new XboxController(0);
+
+    dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
+        driverController.getRightX()), dt));
+
+    var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
+    var in = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
+    var out = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   }
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
   }
 }
