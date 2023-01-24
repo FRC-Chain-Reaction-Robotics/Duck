@@ -49,8 +49,8 @@ public class Robot extends TimedRobot {
     dt = new DifferentialDrive(m_leftMotor, m_rightMotor);
     XboxController driverController = new XboxController(0);
 
-    dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
-        driverController.getRightX()), dt));
+    // dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
+        // driverController.getRightX()), dt));
 
     var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
     var in = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
