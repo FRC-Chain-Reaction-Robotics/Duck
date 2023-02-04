@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -15,7 +15,11 @@ public class IntakeShooter extends SubsystemBase
     // CANSparkMax can = new CANSparkMax(6, MotorType.kBrushless);  
     TalonSRX can = new TalonSRX(3); // instantiation
 
+<<<<<<< HEAD
+    DoubleSolenoid ds = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 4);
+=======
     DoubleSolenoid ds = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
+>>>>>>> 43bd07b930ebf48172535a2c911113ae195d19cc
     Compressor comp = new Compressor(PneumaticsModuleType.CTREPCM);
   
     public IntakeShooter() // constructor; like any class
