@@ -10,16 +10,21 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-//import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-//import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+ import com.revrobotics.CANSparkMax.IdleMode;
+ import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.*;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.PrintCommand;
+// import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.IntakeShooter;
@@ -55,6 +60,11 @@ public class Robot extends TimedRobot {
     var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
     var in = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
     var out = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
+
+    CANSparkMax spark = new CANSparkMax(5, MotorType.kBrushless);
+    JoystickButton j = new JoystickButton(driverController, XboxController.Button.kX.value);
+    j.whenPressed(new InstantCommand(() -> spark.set(1)));
+
   }
 
   @Override
