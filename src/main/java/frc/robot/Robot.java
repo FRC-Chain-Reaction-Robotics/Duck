@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.IntakeShooter;
+import frc.robot.IntakeShooter;
 //import frc.robot.subsystems.Swerve;
 
 /**
@@ -48,13 +48,18 @@ public class Robot extends TimedRobot {
 
     dt = new DifferentialDrive(m_leftMotor, m_rightMotor);
     XboxController driverController = new XboxController(0);
-
-    dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
-        driverController.getRightX()), dt));
+    IntakeShooter intake = new IntakeShooter();
+    //dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
+        //driverController.getRightX()), dt));
 
     var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
     var in = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
     var out = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
+    togglePnuematics.whenPressed(new InstantCommand(intake::togglePneumatics));
+    in.whileHeld(new RunCommand(intake::intakeInward, intake))
+        .or(out.whileHeld(new RunCommand(intake::intakeOutwards, intake)))
+        .whenInactive(new RunCommand(intake::intakeStop, intake));
+
   }
 
   @Override
