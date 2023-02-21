@@ -48,17 +48,19 @@ public class Robot extends TimedRobot {
 
     dt = new DifferentialDrive(m_leftMotor, m_rightMotor);
     XboxController driverController = new XboxController(0);
-//<<<<<<< HEAD
+
     IntakeShooter intake = new IntakeShooter();
+
+  
     //dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
         //driverController.getRightX()), dt));
-//=======
 
-    // dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
+
+    // dt.setDefaultCommand( RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
         // driverController.getRightX()), dt));
-//>>>>>>> 43bd07b930ebf48172535a2c911113ae195d19cc
 
-    var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
+
+   /* var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
     var in = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
     var out = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
     togglePnuematics.whenPressed(new InstantCommand(intake::togglePneumatics));
@@ -67,11 +69,19 @@ public class Robot extends TimedRobot {
         .whenInactive(new RunCommand(intake::intakeStop, intake));
     //B button to test motors
     var motorTestButton = new JoystickButton(driverController, XboxController.Button.kB.value);
-    //motorTestButton.whenPressed(new InstantCommand(()-> (new WPI_TalonSRX(5)).set(3), intake));
+    //motorTestButton.whenPressed(new InstantCommand(()-> (new WPI_TalonSRX(5)).set(3), intake)); */
+  
 
   }
 
   @Override
   public void teleopPeriodic() {
+    dt.feed(); 
+    IntakeShooter intake = new IntakeShooter(); 
+    intake.togglePneumatics(); 
+
+    
+  
   }
+
 }
