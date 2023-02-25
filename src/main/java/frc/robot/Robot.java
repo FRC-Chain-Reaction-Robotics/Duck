@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
     CANSparkMax spark = new CANSparkMax(5, MotorType.kBrushless);
     JoystickButton j = new JoystickButton(driverController, XboxController.Button.kX.value);
     j.whenPressed(new InstantCommand(() -> spark.set(1)));
-
   }
 
   @Override
