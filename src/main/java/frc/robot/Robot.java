@@ -4,40 +4,31 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-//import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-//import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import frc.robot.commands.TeleopSwerve;
-import frc.robot.IntakeShooter;
-//import frc.robot.subsystems.Swerve;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj2.command.*;
 
 /**
- * This is a demo program showing the use of the DifferentialDrive class, specifically it contains
- * the code necessary to operate a robot with tank drive.
+ * This is a demo program showing the use of the DifferentialDrive class. Runs the motors with tank
+ * steering and an Xbox controller.
  */
 public class Robot extends TimedRobot {
-  private DifferentialDrive dt;
-  private Joystick m_leftStick;
-  private Joystick m_rightStick;
-
-  private final MotorController m_leftMotor = new MotorControllerGroup(new WPI_TalonSRX(0), new WPI_TalonSRX(1));
-  
-  private final MotorController m_rightMotor = new MotorControllerGroup(new WPI_TalonSRX(2), new WPI_TalonSRX(3));
-
+  private final MotorController m_leftMotor = new MotorControllerGroup(new WPI_TalonSRX(1), new WPI_TalonSRX(3));
+  private final MotorController m_rightMotor = new MotorControllerGroup(new WPI_TalonSRX(2), new WPI_TalonSRX(4));
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+  private final CommandXboxController m_driverController = new CommandXboxController(0);
 
   @Override
   public void robotInit() {
@@ -45,56 +36,17 @@ public class Robot extends TimedRobot {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightMotor.setInverted(true);
-
-    dt = new DifferentialDrive(m_leftMotor, m_rightMotor);
-    XboxController driverController = new XboxController(0);
-<<<<<<< HEAD
-=======
-
->>>>>>> e8e5889689b39ebdbb3c945e2b16e3defbe7af33
-    IntakeShooter intake = new IntakeShooter();
-
-  
-    //dt.setDefaultCommand(new RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
-        //driverController.getRightX()), dt));
-<<<<<<< HEAD
-=======
-
-
-    // dt.setDefaultCommand( RunCommand(() -> dt.arcadeDrive(-driverController.getLeftY(),
-        // driverController.getRightX()), dt));
->>>>>>> e8e5889689b39ebdbb3c945e2b16e3defbe7af33
-
-
-   /* var togglePnuematics = new JoystickButton(driverController, XboxController.Button.kA.value);
-    var in = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
-    var out = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
-<<<<<<< HEAD
-
-    CANSparkMax spark = new CANSparkMax(5, MotorType.kBrushless);
-    JoystickButton j = new JoystickButton(driverController, XboxController.Button.kX.value);
-    j.whenPressed(new InstantCommand(() -> spark.set(1)));
-=======
-    togglePnuematics.whenPressed(new InstantCommand(intake::togglePneumatics));
-    in.whileHeld(new RunCommand(intake::intakeInward, intake))
-        .or(out.whileHeld(new RunCommand(intake::intakeOutwards, intake)))
-        .whenInactive(new RunCommand(intake::intakeStop, intake));
-    //B button to test motors
-    var motorTestButton = new JoystickButton(driverController, XboxController.Button.kB.value);
-    //motorTestButton.whenPressed(new InstantCommand(()-> (new WPI_TalonSRX(5)).set(3), intake)); */
-  
-
->>>>>>> e8e5889689b39ebdbb3c945e2b16e3defbe7af33
+    // m_robotDrive.setMaxOutput(1.0);
+    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_robotDrive.arcadeDrive(-m_driverController.getLeftY() * 0.25
+    // , -m_driverController.getRightX() * 0.25)));
   }
 
   @Override
   public void teleopPeriodic() {
-    dt.feed(); 
-    IntakeShooter intake = new IntakeShooter(); 
-    intake.togglePneumatics(); 
-
-    
-  
+    // Drive with tank drive.
+    // That means that the Y axis of the left stick moves the left side
+    // of the robot forward and backward, and the Y axis of the right stick 
+    m_robotDrive.arcadeDrive(-m_driverController.getLeftY(), -m_driverController.getRightX());
+    // m_driverController.rightBumper().whileTrue(new RunCommand(() -> m_robotDrive.setMaxOutput(.3)));
   }
-
 }
